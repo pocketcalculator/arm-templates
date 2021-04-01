@@ -11,21 +11,23 @@
         "region": {
             "type": "string",
             "metadata": {
-                "description":  "Azure region for deployment"
+                "description": "Azure region for deployment"
             }
         }
     },
     "functions": [],
     "variables": {},
-    "resources": [{
-        "name": "[parameters('resourceGroupName')]",
-        "type": "Microsoft.Resources/resourceGroups",
-        "apiVersion": "2019-10-01",
-        "location": "[parameters('region')]",
-        "dependsOn": [
-        ],
-        "tags": {
+    "resources": [
+        {
+            "name": "[parameters('resourceGroupName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2019-10-01",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+            ],
+            "tags": {
+            }
         }
-    }],
+    ],
     "outputs": {}
 }
