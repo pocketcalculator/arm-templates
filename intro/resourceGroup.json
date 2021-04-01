@@ -1,0 +1,31 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "name of the resource group to create"
+            }
+        },
+        "region": {
+            "type": "string",
+            "metadata": {
+                "description":  "Azure region for deployment"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [{
+        "name": "[parameters('resourceGroupName')]",
+        "type": "Microsoft.Resources/resourceGroups",
+        "apiVersion": "2019-10-01",
+        "location": "[parameters('region')]",
+        "dependsOn": [
+        ],
+        "tags": {
+        }
+    }],
+    "outputs": {}
+}
