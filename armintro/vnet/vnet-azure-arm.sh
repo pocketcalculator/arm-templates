@@ -7,6 +7,7 @@ environment=dev
 owner=paul.sczurek@outlook.com
 resourceGroupName=$application-$environment-rg
 vnetName=$application-$environment-vnet
+vnetCIDRPrefix=10.0
 
 echo subscription = $subscription
 echo region = $region
@@ -15,13 +16,14 @@ echo environment = $environment
 echo owner = $owner
 echo resourceGroupName = $resourceGroupName
 echo vnetName = $vnetName
+echo vnetCIDRPrefix = $vnetCIDRPrefix
 
 echo "Creating deployment for ${environment} ${application} vnet..."
 az deployment group create \
-	--rollback-on-error \
 	--resource-group $resourceGroupName \
 	--name $application-$environment-resourceGroup \
 	--template-file ./vnet.json \
 	--parameters \
-		"vnetName=$vnetName"
+		"vnetName=$vnetName" \
+		"vnetCIDRPrefix=$vnetCIDPrefix"
 echo "Deployment for ${environment} ${application} vnet is complete."
