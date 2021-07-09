@@ -69,7 +69,46 @@
             "[parameters('vnetName')]"
           ],
           "properties": {
-            "addressPrefix": "[parameters('bastionSubnet0')]"
+            "addressPrefix": "[parameters('bastionSubnet0')]",
+            "networkSecurityGroup": {
+              "name": "bastionNetworkSecurityGroup",
+              "location": "[parameters('location')]",
+              "dependsOn": [
+                "[parameters('vnetName')]"
+              ],
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "sshRule",
+                    "properties": {
+                      "description": "allow all inbound on port 22 (SSH)",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "22",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 100,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "rdpRule",
+                    "properties": {
+                      "description": "allow all inbound on port 3389 (RDP)",
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "3389",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 110,
+                      "direction": "Inbound"
+                    }
+                  }
+                ]
+              }
+            }
           }
         },
         {
@@ -106,47 +145,6 @@
           ],
           "properties": {
             "addressPrefix": "[parameters('dbSubnet0')]"
-          }
-        },
-        {
-          "name": "bastionNetworkSecurityGroup",
-          "type": "Microsoft.Network/networkSecurityGroups",
-          "apiVersion": "2019-11-01",
-          "location": "[parameters('location')]",
-          "dependsOn": [
-            "[parameters('vnetName')]"
-          ],
-          "properties": {
-            "securityRules": [
-              {
-                "name": "sshRule",
-                "properties": {
-                  "description": "allow all inbound on port 22 (SSH)",
-                  "protocol": "Tcp",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "22",
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "*",
-                  "access": "Allow",
-                  "priority": 100,
-                  "direction": "Inbound"
-                }
-              },
-              {
-                "name": "rdpRule",
-                "properties": {
-                  "description": "allow all inbound on port 3389 (RDP)",
-                  "protocol": "Tcp",
-                  "sourcePortRange": "*",
-                  "destinationPortRange": "3389",
-                  "sourceAddressPrefix": "*",
-                  "destinationAddressPrefix": "*",
-                  "access": "Allow",
-                  "priority": 110,
-                  "direction": "Inbound"
-                }
-              }
-            ]
           }
         },
         {

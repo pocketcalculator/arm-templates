@@ -1,0 +1,313 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "bastionSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "sg-bastion",
+      "metadata": {
+        "description": "Bastion Security Group name"
+      }
+    },
+    "webSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "sg-web",
+      "metadata": {
+        "description": "Web Security Group name"
+      }
+    },
+    "appSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "sg-app",
+      "metadata": {
+        "description": "App Security Group name"
+      }
+    },
+    "dbSecurityGroupName": {
+      "type": "string",
+      "defaultValue": "sg-db",
+      "metadata": {
+        "description": "DB Security Group name"
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "VNet1",
+      "metadata": {
+        "description": "VNet name"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location in which the resources should be deployed."
+      }
+    },
+    "bastionSubnet0Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.1.0/27",
+      "metadata": {
+        "description": "Bastion Subnet 0 prefix"
+      }
+    },
+    "bastionSubnet0Name": {
+      "type": "string",
+      "defaultValue": "snet-bastion-0",
+      "metadata": {
+        "description": "Bastion Subnet 0 name"
+      }
+    },
+    "publicSubnet0Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.10.0/24",
+      "metadata": {
+        "description": "Public Subnet 0 prefix"
+      }
+    },
+    "publicSubnet0Name": {
+      "type": "string",
+      "defaultValue": "snet-public-0",
+      "metadata": {
+        "description": "Public Subnet 0 name"
+      }
+    },
+    "privateSubnet0Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.20.0/24",
+      "metadata": {
+        "description": "Private Subnet 0 prefix"
+      }
+    },
+    "privateSubnet0Name": {
+      "type": "string",
+      "defaultValue": "snet-private-0",
+      "metadata": {
+        "description": "Private Subnet 0 name"
+      }
+    },
+    "dbSubnet0Prefix": {
+      "type": "string",
+      "defaultValue": "10.0.30.0/24",
+      "metadata": {
+        "description": "DB Subnet 0 prefix"
+      }
+    },
+    "dbSubnet0Name": {
+      "type": "string",
+      "defaultValue": "snet-db-0",
+      "metadata": {
+        "description": "DB Subnet 0 name"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "apiVersion": "2020-05-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('bastionSecurityGroupName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "sshRule",
+            "properties": {
+              "description": "allow all inbound on port 22 (SSH)",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "rdpRule",
+            "properties": {
+              "description": "allow all inbound on port 3389 (RDP)",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2020-05-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('webSecurityGroupName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "httpRule",
+            "properties": {
+              "description": "allow all inbound on port 80 (HTTP)",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "httpsRule",
+            "properties": {
+              "description": "allow all inbound on port 443 (HTTPS)",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2020-05-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('appSecurityGroupName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "https8080Rule",
+            "properties": {
+              "description": "allow all inbound on port 8080 (HTTP)",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8080",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2020-05-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('dbSecurityGroupName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "mysql3306Rule",
+            "properties": {
+              "description": "allow all inbound on port 3306",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3306",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('vnetName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        }
+      },
+      "resources": [
+        {
+          "type": "subnets",
+          "apiVersion": "2020-05-01",
+          "location": "[parameters('location')]",
+          "name": "[parameters('bastionSubnet0Name')]",
+          "dependsOn": [
+            "[parameters('vnetName')]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('bastionSecurityGroupName'))]"
+          ],
+          "properties": {
+            "addressPrefix": "[parameters('bastionSubnet0Prefix')]",
+            "networkSecurityGroup": {
+              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('bastionSecurityGroupName'))]"
+            }
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2020-05-01",
+          "location": "[parameters('location')]",
+          "name": "[parameters('publicSubnet0Name')]",
+          "dependsOn": [
+            "[parameters('vnetName')]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('webSecurityGroupName'))]",
+            "[parameters('bastionSubnet0Name')]"
+          ],
+          "properties": {
+            "addressPrefix": "[parameters('publicSubnet0Prefix')]",
+            "networkSecurityGroup": {
+              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('webSecurityGroupName'))]"
+            }
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2020-05-01",
+          "location": "[parameters('location')]",
+          "name": "[parameters('privateSubnet0Name')]",
+          "dependsOn": [
+            "[parameters('vnetName')]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('appSecurityGroupName'))]",
+            "[parameters('publicSubnet0Name')]"
+          ],
+          "properties": {
+            "addressPrefix": "[parameters('privateSubnet0Prefix')]",
+            "networkSecurityGroup": {
+              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('appSecurityGroupName'))]"
+            }
+          }
+        },
+        {
+          "type": "subnets",
+          "apiVersion": "2020-05-01",
+          "location": "[parameters('location')]",
+          "name": "[parameters('dbSubnet0Name')]",
+          "dependsOn": [
+            "[parameters('vnetName')]",
+            "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('dbSecurityGroupName'))]",
+            "[parameters('privateSubnet0Name')]"
+          ],
+          "properties": {
+            "addressPrefix": "[parameters('dbSubnet0Prefix')]",
+            "networkSecurityGroup": {
+              "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('dbSecurityGroupName'))]"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+    "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+    "type": "QuickStart",
+    "itemDisplayName": "Create a Resource Group",
+    "description": "This template creates a resource group within the default subscription.",
+    "summary": "Create a Resource Group",
+    "githubUsername": "pocketcalculator",
+    "docOwner": "pocketcalculator",
+    "dateUpdated": "2021-03-31"
+  }
