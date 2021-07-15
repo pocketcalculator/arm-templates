@@ -4,35 +4,35 @@
   "parameters": {
     "bastionSecurityGroupName": {
       "type": "string",
-      "defaultValue": "sg-bastion",
+      "defaultValue": "nsg-bastion",
       "metadata": {
-        "description": "Bastion Security Group name"
+        "description": "Bastion Network Security Group name"
       }
     },
     "webSecurityGroupName": {
       "type": "string",
-      "defaultValue": "sg-web",
+      "defaultValue": "nsg-web",
       "metadata": {
-        "description": "Web Security Group name"
+        "description": "Web Network Security Group name"
       }
     },
     "appSecurityGroupName": {
       "type": "string",
-      "defaultValue": "sg-app",
+      "defaultValue": "nsg-app",
       "metadata": {
-        "description": "App Security Group name"
+        "description": "App Network Security Group name"
       }
     },
     "dbSecurityGroupName": {
       "type": "string",
-      "defaultValue": "sg-db",
+      "defaultValue": "nsg-db",
       "metadata": {
-        "description": "DB Security Group name"
+        "description": "DB Network Security Group name"
       }
     },
     "vnetName": {
       "type": "string",
-      "defaultValue": "VNet1",
+      "defaultValue": "[concat('vnet', uniqueString(resourceGroup().id))]",
       "metadata": {
         "description": "VNet name"
       }
