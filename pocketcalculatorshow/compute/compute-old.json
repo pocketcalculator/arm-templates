@@ -37,9 +37,8 @@
         "description": "Web Network Security Group name"
       }
     },
-      "adminUsername": {
+    "adminUsername": {
       "type": "string",
-      "defaultValue": "admin",
       "metadata": {
         "description": "Username for the Virtual Machine."
       }
@@ -57,7 +56,6 @@
     },
     "adminPasswordOrKey": {
       "type": "secureString",
-      "defaultValue": "*!P@55w0rd!",
       "metadata": {
         "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
       }
@@ -99,8 +97,8 @@
   },
   "functions": [],
   "variables": {
-    "publicIPAddressName": "[format('pip-{0}', parameters('vmName'))]",
-    "networkInterfaceName": "[format('nic-{0}', parameters('vmName'))]",
+    "publicIPAddressName": "[format('{0}PublicIP', parameters('vmName'))]",
+    "networkInterfaceName": "[format('{0}NetInt', parameters('vmName'))]",
     "osDiskType": "Standard_LRS",
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
@@ -138,10 +136,7 @@
         "networkSecurityGroup": {
           "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('webSecurityGroupName'))]"
         }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
