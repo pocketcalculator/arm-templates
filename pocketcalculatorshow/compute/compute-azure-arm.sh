@@ -9,12 +9,6 @@ resourceGroupName=rg-$application-$environment-$region
 vnetName=vnet-$application-$environment-$region
 vnetCIDRPrefix=10.0
 
-vmName=vm-$application-$environment-$region
-adminUsername=pocketcalculatorshow
-adminPasswordOrKey=@p0ck3tcalculat0rshow!
-subnnetName=snet-private-0
-networkSecurityGroupName=sg-app
-
 echo subscription = $subscription
 echo location = $location
 echo application = $application
@@ -24,16 +18,16 @@ echo resourceGroupName = $resourceGroupName
 echo vnetName = $vnetName
 echo vnetCIDRPrefix = $vnetCIDRPrefix
 
-vmName=vm-$application-$environment-$region
-adminUsername=$adminUsername
-adminPasswordOrKey=$adminPasswordOrKey
-subnnetName=$subnnetName
-networkSecurityGroupName=$networkSecurityGroupName
+vmName=vm-web-$application-$environment-$region
+adminUsername=pocketcalculatorshow
+adminPasswordOrKey=@p0ck3tcalculat0rshow!
+subnetName=snet-public-0
+networkSecurityGroupName=sg-web
 
 echo vmName = $vmName
 echo adminUsername = $adminUsername
 echo adminPasswordOrKey = $adminPasswordOrKey
-echo subnnetName = $subnnetName
+echo subnetName = $subnnetName
 echo networkSecurityGroupName = $networkSecurityGroupName
 
 echo "Creating deployment for ${environment} ${application} compute..."
@@ -43,8 +37,8 @@ az deployment group create \
 	--template-file ./compute.json \
 	--parameters \
 		"location=$region" \
-        "adminUsername=$adminUsername" \
-        "adminPasswordOrKey=$adminPasswordOrKey" \
-        "vmName=$vmName" \
-        "vnetName=$vnetName"
+	        "adminUsername=$adminUsername" \
+       		"adminPasswordOrKey=$adminPasswordOrKey" \
+        	"vmName=$vmName" \
+        	"vnetName=$vnetName"
 echo "Deployment for ${environment} ${application} compute is complete."

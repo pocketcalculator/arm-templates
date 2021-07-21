@@ -25,9 +25,9 @@
     },
       "publicSubnet0Name": {
       "type": "string",
-      "defaultValue": "snet-public-0",
+      "defaultValue": "snet-bastion-0",
       "metadata": {
-        "description": "Public Subnet 0 name"
+        "description": "Bastion Subnet 0 name"
       }
     },
       "bastionSecurityGroupName": {

@@ -30,7 +30,7 @@
         "description": "Public Subnet 0 name"
       }
     },
-      "webSecurityGroupName": {
+      "bastionSecurityGroupName": {
       "type": "string",
       "defaultValue": "nsg-web",
       "metadata": {
@@ -64,7 +64,7 @@
     },
     "dnsLabelPrefix": {
       "type": "string",
-      "defaultValue": "[toLower(format('simplelinuxvm-{0}', uniqueString(resourceGroup().id)))]",
+      "defaultValue": "[toLower(format('web-{0}', uniqueString(resourceGroup().id)))]",
       "metadata": {
         "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
       }
@@ -136,7 +136,7 @@
           }
         ],
         "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('webSecurityGroupName'))]"
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('bastionSecurityGroupName'))]"
         }
       },
       "dependsOn": [
